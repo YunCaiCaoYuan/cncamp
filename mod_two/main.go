@@ -32,18 +32,19 @@ func newRequest2() http.Handler {
 
 // 3、Server 端记录访问日志包括客户端 IP，HTTP 返回码，输出到 server 端的标准输出
 func logAccess(request *http.Request) {
-	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), request.RemoteAddr)
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), request.RemoteAddr, "200")
 }
 
 // 4、当访问 localhost/healthz 时，应返回 200
 func healthz() http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		logAccess(request)
-		writer.WriteHeader(200)
+		writer.Write([]byte("200"))
 	})
 }
 
 func main() {
+	fmt.Println("server start!")
 	mux := http.NewServeMux()
 
 	mux.Handle("/request1", newRequest1())
