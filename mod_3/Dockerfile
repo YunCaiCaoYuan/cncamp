@@ -1,3 +1,4 @@
+#多阶段构建
 FROM golang:1.17 AS builder
 
 ENV GO111MODULE=off \
