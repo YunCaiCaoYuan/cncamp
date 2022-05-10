@@ -11,3 +11,6 @@
 
 ### 查看IP配置
     sudo nsenter -t `ps aux |grep mod_two |grep -v grep | awk '{print $2}'` -n ip a
+
+### 保存镜像文件
+    docker save -o myhttpserve.tar 769460962/myhttpserver:v2.1
