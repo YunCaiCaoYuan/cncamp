@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: better-http-server
+spec:
+  containers:
+    - name: better-http-server
+      image: 769460962/myhttpserver:v2.1
+      readinessProbe:
+        httpGet:
+          ### this probe will fail with 404 error code
+          ### only httpcode between 200-400 is retreated as success
+          path: /healthz
+          port: 80
+        initialDelaySeconds: 30
+        periodSeconds: 5
+        successThreshold: 2
