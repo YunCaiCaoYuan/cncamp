@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 	"os"
+	"os/signal"
 	"strings"
+	"syscall"
 	"time"
 )
 
@@ -43,6 +46,15 @@ func healthz() http.Handler {
 	})
 }
 
+func GracefulExit(server *http.Server) {
+	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
+	defer cancel()
+	if err := server.Shutdown(ctx); err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println("shutdown ok ")
+}
+
 func main() {
 	fmt.Println("server start!")
 	mux := http.NewServeMux()
@@ -50,5 +62,26 @@ func main() {
 	mux.Handle("/request1", newRequest1())
 	mux.Handle("/request2", newRequest2())
 	mux.Handle("/healthz", healthz())
-	_ = http.ListenAndServe(":80", mux)
+	//_ = http.ListenAndServe(":80", mux)
+	server := &http.Server{Addr: ":80", Handler: mux}
+
+	// 监听指定信号：sigterm
+	c := make(chan os.Signal)
+	signal.Notify(c, syscall.SIGTERM)
+	go func() {
+		for s := range c {
+			switch s {
+			case syscall.SIGTERM:
+				GracefulExit(server)
+			default:
+				fmt.Println("other signal", s)
+			}
+		}
+	}()
+
+	if err := server.ListenAndServe(); err != nil {
+		fmt.Println("exit reason", err)
+	}
+
+	fmt.Println("main goroutine exit")
 }
