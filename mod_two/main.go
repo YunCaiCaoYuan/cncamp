@@ -47,6 +47,7 @@ func healthz() http.Handler {
 }
 
 func GracefulExit(server *http.Server) {
+	fmt.Println("GracefulExit...")
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
@@ -81,7 +82,7 @@ func main() {
 	}()
 
 	if err := server.ListenAndServe(); err != nil {
-		fmt.Println("exit reason", err)
+		fmt.Println("exit reason, ", err)
 	}
 
 	fmt.Println("main goroutine exit")
