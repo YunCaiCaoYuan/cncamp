@@ -72,6 +72,7 @@ func main() {
 		for s := range c {
 			switch s {
 			case syscall.SIGTERM:
+				fmt.Println("sigterm")
 				GracefulExit(server)
 			default:
 				fmt.Println("other signal", s)
