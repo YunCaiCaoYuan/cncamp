@@ -19,8 +19,8 @@ spec:
         httpGet:
           path: /livez
           port: 80
-          failureThreshold: 1
-          periodSeconds: 10
+        failureThreshold: 1
+        periodSeconds: 10
       resources:
         requests:
           cpu: "200m"
