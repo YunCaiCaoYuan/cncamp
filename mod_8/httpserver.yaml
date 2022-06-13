@@ -16,6 +16,9 @@ spec:
         periodSeconds: 5
         successThreshold: 2
       resources:
+        requests:
+          cpu: "200m"
+          memory: "128Mi"
         limits:
-          cpu:"500m"
-          memory:"256Mi"
+          cpu: "500m"
+          memory: "200Mi"
