@@ -60,7 +60,7 @@ func GracefulExit(server *http.Server) {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
-		logger.Error("server-Shutdown...", zap.Err(err))
+		logger.Error("server-Shutdown...", zap.Error(err))
 	}
 	logger.Info("shutdown ok...")
 }
@@ -95,7 +95,7 @@ func main() {
 	}()
 
 	if err := server.ListenAndServe(); err != nil {
-		logger.Error("other signal", zap.Err(err))
+		logger.Error("other signal", zap.Error(err))
 	}
 
 	logger.Info("main goroutine exit")
