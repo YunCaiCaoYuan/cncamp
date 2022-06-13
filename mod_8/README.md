@@ -5,8 +5,12 @@
     优雅终止
         GO代码监听sigterm信号
 
-    todo:
     资源需求和 QoS 保证
+        指定了request和limits
+    
     探活
+        和就绪一样
+
+    TODO:
     日常运维需求，日志等级
     配置和代码分离

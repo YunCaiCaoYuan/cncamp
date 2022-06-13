@@ -15,6 +15,13 @@ spec:
         initialDelaySeconds: 30
         periodSeconds: 5
         successThreshold: 2
+      livenessProbe:
+        httpGet:
+          path: /livez
+          port: 80
+        initialDelaySeconds: 30
+        periodSeconds: 5
+        successThreshold: 2
       resources:
         requests:
           cpu: "200m"

@@ -46,6 +46,13 @@ func healthz() http.Handler {
 	})
 }
 
+func livez() http.Handler {
+	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
+		logAccess(request)
+		writer.Write([]byte("200"))
+	})
+}
+
 func GracefulExit(server *http.Server) {
 	fmt.Println("GracefulExit...")
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
@@ -63,6 +70,7 @@ func main() {
 	mux.Handle("/request1", newRequest1())
 	mux.Handle("/request2", newRequest2())
 	mux.Handle("/healthz", healthz())
+	mux.Handle("/livez", livez())
 	//_ = http.ListenAndServe(":80", mux)
 	server := &http.Server{Addr: ":80", Handler: mux}
 
