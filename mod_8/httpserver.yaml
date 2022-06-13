@@ -15,3 +15,7 @@ spec:
         initialDelaySeconds: 30
         periodSeconds: 5
         successThreshold: 2
+      resources:
+        limits:
+          cpu:"500m"
+          memory:"256Mi"
