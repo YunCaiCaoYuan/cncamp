@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"go.uber.org/zap"
 	"net/http"
 	"os"
 	"os/signal"
@@ -35,6 +36,7 @@ func newRequest2() http.Handler {
 
 // 3、Server 端记录访问日志包括客户端 IP，HTTP 返回码，输出到 server 端的标准输出
 func logAccess(request *http.Request) {
+	logger.Info("logAccess", zap.Any("request", request))
 	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), request.RemoteAddr, "200")
 }
 
@@ -54,17 +56,20 @@ func livez() http.Handler {
 }
 
 func GracefulExit(server *http.Server) {
-	fmt.Println("GracefulExit...")
+	logger.Info("GracefulExit...", zap.Any("server", server))
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
-		fmt.Println("server.Shutdown, ", err)
+		logger.Error("server-Shutdown...", zap.Err(err))
 	}
-	fmt.Println("shutdown ok ")
+	logger.Info("shutdown ok...")
 }
 
+var logger *zap.Logger
+
 func main() {
-	fmt.Println("server start!")
+	logger.Info("server start!")
+	logger, _ = zap.NewProduction()
 	mux := http.NewServeMux()
 
 	mux.Handle("/request1", newRequest1())
@@ -81,17 +86,17 @@ func main() {
 		for s := range c {
 			switch s {
 			case syscall.SIGTERM:
-				fmt.Println("sigterm")
+				logger.Info("sigterm")
 				GracefulExit(server)
 			default:
-				fmt.Println("other signal", s)
+				logger.Info("other signal", zap.Any("s", s))
 			}
 		}
 	}()
 
 	if err := server.ListenAndServe(); err != nil {
-		fmt.Println("exit reason, ", err)
+		logger.Error("other signal", zap.Err(err))
 	}
 
-	fmt.Println("main goroutine exit")
+	logger.Info("main goroutine exit")
 }
