@@ -68,10 +68,10 @@ func GracefulExit(server *http.Server) {
 var logger *zap.Logger
 
 func main() {
-	logger.Info("server start!")
 	logger, _ = zap.NewProduction()
-	mux := http.NewServeMux()
+	logger.Info("server start!")
 
+	mux := http.NewServeMux()
 	mux.Handle("/request1", newRequest1())
 	mux.Handle("/request2", newRequest2())
 	mux.Handle("/healthz", healthz())
