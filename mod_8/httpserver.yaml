@@ -2,6 +2,9 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: better-http-server
+  labels: {
+    "app":"better-http-server"
+  }
 spec:
   containers:
     - name: better-http-server
