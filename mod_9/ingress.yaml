@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpserver-80
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ingress.sunbin123.xyz
+      http:
+        paths:
+          - backend:
+              service:
+                name: http-server 
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+
