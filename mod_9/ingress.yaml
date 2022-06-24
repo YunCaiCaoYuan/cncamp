@@ -2,6 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: httpserver-80
+  annotations:
+    cert-manager.io/issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
   rules:
@@ -15,4 +17,7 @@ spec:
                   number: 80
             path: /
             pathType: Prefix
-
+  tls:
+    - hosts:
+        - ingress.sunbin123.xyz
+      secretName: mod8-tls
