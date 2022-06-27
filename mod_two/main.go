@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"go.uber.org/zap"
+	"math/rand"
 	"net/http"
 	"os"
 	"os/signal"
@@ -20,6 +21,7 @@ const (
 func newRequest1() http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		logAccess(request)
+		sleepRand()
 		for k, v := range request.Header {
 			writer.Header().Set(k, strings.Join(v, ";"))
 		}
@@ -30,6 +32,7 @@ func newRequest1() http.Handler {
 func newRequest2() http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		logAccess(request)
+		sleepRand()
 		writer.Header().Set(VERSION, os.Getenv(VERSION))
 	})
 }
@@ -37,6 +40,7 @@ func newRequest2() http.Handler {
 // 3、Server 端记录访问日志包括客户端 IP，HTTP 返回码，输出到 server 端的标准输出
 func logAccess(request *http.Request) {
 	logger.Info("logAccess", zap.Any("request", request))
+	sleepRand()
 	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), request.RemoteAddr, "200")
 }
 
@@ -44,6 +48,7 @@ func logAccess(request *http.Request) {
 func healthz() http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		logAccess(request)
+		sleepRand()
 		writer.Write([]byte("200"))
 	})
 }
@@ -51,8 +56,14 @@ func healthz() http.Handler {
 func livez() http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 		logAccess(request)
+		sleepRand()
 		writer.Write([]byte("200"))
 	})
+}
+
+func sleepRand() {
+	ms := rand.Int63n(2000)
+	time.Sleep(time.Duration(ms) * time.Millisecond)
 }
 
 func GracefulExit(server *http.Server) {
