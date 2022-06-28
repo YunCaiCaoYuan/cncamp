@@ -25,6 +25,7 @@ func newRequest1() http.Handler {
 		timer := metrics.NewTimer()
 		defer timer.ObserveTotal()
 		logAccess(request)
+		sleepRand()
 		for k, v := range request.Header {
 			writer.Header().Set(k, strings.Join(v, ";"))
 		}
@@ -37,6 +38,7 @@ func newRequest2() http.Handler {
 		timer := metrics.NewTimer()
 		defer timer.ObserveTotal()
 		logAccess(request)
+		sleepRand()
 		writer.Header().Set(VERSION, os.Getenv(VERSION))
 	})
 }
@@ -45,14 +47,11 @@ func newRequest2() http.Handler {
 func logAccess(request *http.Request) {
 	logger.Info("logAccess", zap.Any("request", request))
 	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), request.RemoteAddr, "200")
-	sleepRand()
 }
 
 // 4、当访问 localhost/healthz 时，应返回 200
 func healthz() http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		timer := metrics.NewTimer()
-		defer timer.ObserveTotal()
 		logAccess(request)
 		writer.Write([]byte("200"))
 	})
@@ -60,8 +59,6 @@ func healthz() http.Handler {
 
 func livez() http.Handler {
 	return http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-		timer := metrics.NewTimer()
-		defer timer.ObserveTotal()
 		logAccess(request)
 		writer.Write([]byte("200"))
 	})
