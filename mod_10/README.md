@@ -3,3 +3,5 @@
     已在mod_two添加；
     2、为 HTTPServer 项目添加延时 Metric；
     对应镜像：769460962/myhttpserver:v4.1
+    3、将 HTTPServer 部署至测试集群，并完成 Prometheus 配置；
+    已在mod_8的yaml添加

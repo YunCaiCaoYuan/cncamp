@@ -5,10 +5,13 @@ metadata:
   labels: {
     "app":"better-http-server"
   }
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "80"
 spec:
   containers:
     - name: better-http-server
-      image: 769460962/myhttpserver:v3.2
+      image: 769460962/myhttpserver:v4.1
       readinessProbe:
         httpGet:
           ### this probe will fail with 404 error code
@@ -31,3 +34,5 @@ spec:
         limits:
           cpu: "500m"
           memory: "200Mi"
+      ports:
+        - containerPort: 80    

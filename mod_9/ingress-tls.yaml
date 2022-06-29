@@ -20,4 +20,5 @@ spec:
   tls:
     - hosts:
         - ingress-tls.sunbin123.xyz
-      secretName: mod8-tls
+      secretName: mod8-tls-2
+
