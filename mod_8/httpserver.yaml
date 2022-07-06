@@ -5,9 +5,6 @@ metadata:
   labels: {
     "app":"better-http-server"
   }
-  annotations:
-    prometheus.io/scrape: "true"
-    prometheus.io/port: "80"
 spec:
   containers:
     - name: better-http-server
