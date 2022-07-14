@@ -8,7 +8,7 @@ metadata:
 spec:
   containers:
     - name: better-http-server
-      image: 769460962/myhttpserver:v4.1
+      image: 769460962/myhttpserver:v4.3
       readinessProbe:
         httpGet:
           ### this probe will fail with 404 error code
